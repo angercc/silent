@@ -294,6 +294,34 @@ function Aiming.Character(Player)
     return Player.Character
 end
 
+function sendNotification(text)
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Exile",
+        Text = text,
+        Duration = 5
+    })
+end
+
+local silentAimed 
+Mouse.KeyDown:Connect(function(k)
+    if (k == "q") then
+      
+        if (Aiming.Enabled) then
+            silentAimed = not silentAimed
+                
+            if silentAimed then
+                silentVictim = Aiming.GetClosestPlayerToCursor()
+                sendNotification("Locked onto: " .. tostring(silentVictim.Character.Humanoid.DisplayName))
+            elseif not silentAimed and silentVictim ~= nil then
+                silentVictim = nil
+
+                sendNotification('Unlocked!')
+            end
+        end
+    end
+end)
+
+
 -- // Check Health
 function Aiming.CheckHealth(Player)
     -- // Get Humanoid
